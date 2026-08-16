@@ -41,7 +41,7 @@ MovieWebApp/
 ├── omdb_api.py         # OMDb request and response normalisation
 ├── requirements.txt
 ├── .env.example        # template for the required environment variable
-├── data/               # SQLite database (created on first run)
+├── data/               # holds movies.db, created on first run
 ├── static/
 │   └── style.css
 └── templates/
@@ -103,13 +103,7 @@ The `.env` file is git-ignored and never committed.
 
 ### Run
 
-The database directory is not part of the repository, so create it once:
-
-```bash
-mkdir data
-```
-
-Then start the development server:
+Start the development server:
 
 ```bash
 python app.py
