@@ -41,10 +41,11 @@ def format_response(data: dict) -> dict:
     return formatted_response
 
 
-def fetch_movie(title: str) -> dict | None:
+def fetch_movie(title: str, year=None) -> dict | None:
     """Fetch movie details from OMDb API.
 
     :param title: The title of the movie to fetch.
+    :param year: The year of the movie to fetch (optional).
     :return: A formatted dictionary containing only the necessary
     keys (name, year, director, poster_url).
     """
@@ -53,9 +54,13 @@ def fetch_movie(title: str) -> dict | None:
 
     if not API_KEY:
         raise ValueError("API key is not set in environment variables.")
+    params = {"apikey": API_KEY,
+                  "t": title}
+    if year:
+        params["y"] = year
 
     try:
-        response = requests.get(url, params={"apikey": API_KEY, "t": title})
+        response = requests.get(url, params=params)
         response.raise_for_status()
     except requests.RequestException as e:
         print(f"Error fetching movie details: {e}")
