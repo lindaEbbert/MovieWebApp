@@ -20,6 +20,7 @@ data_manager = DataManager()
 @app.route("/", methods=["GET"])
 def index():
     """Render the index page."""
+
     users = data_manager.get_users()
     return render_template("index.html", users=users)
 
@@ -85,6 +86,9 @@ def add_movie(user_id):
 def update_movie(user_id, movie_id):
     """Update a movie's title."""
 
+    user = data_manager.get_user(user_id)
+    if not user:
+        abort(404)
     new_title = request.form.get("new_title").strip()
     if not new_title:
         return redirect(url_for("get_movies", user_id=user_id))
@@ -99,10 +103,24 @@ def update_movie(user_id, movie_id):
 def delete_movie(user_id, movie_id):
     """Delete a movie from a user's list."""
 
+    user = data_manager.get_user(user_id)
+    if not user:
+        abort(404)
+
     is_deleted = data_manager.delete_movie(movie_id)
     if not is_deleted:
         abort(404)
     return redirect(url_for("get_movies", user_id=user_id))
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('500.html'), 500
 
 
 if __name__ == '__main__':
