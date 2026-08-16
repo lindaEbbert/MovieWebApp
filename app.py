@@ -1,0 +1,33 @@
+import os
+
+from flask import Flask, render_template, request, redirect, url_for
+
+from models import db, User, Movie
+from data_manager import DataManager
+
+app = Flask(__name__)
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/movies.db')}"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
+
+data_manager = DataManager()
+
+
+@app.route("/", methods=["GET"])
+def home():
+    return "Welcome to MoviWeb App!"
+
+
+@app.route("/users", methods=["GET"])
+def list_users():
+    users = data_manager.get_users()
+    return {"users": [user.name for user in users]}
+
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)
