@@ -2,7 +2,7 @@ import os
 
 from flask import abort, Flask, render_template, request, redirect, url_for
 
-from models import db, User, Movie
+from models import db, Movie
 from data_manager import DataManager
 from omdb_api import fetch_movie
 

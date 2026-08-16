@@ -52,7 +52,7 @@ def fetch_movie(title: str, year=None) -> dict | None:
     keys (name, year, director, poster_url).
     """
 
-    url = f"https://www.omdbapi.com/"
+    url = "https://www.omdbapi.com/"
 
     if not API_KEY:
         raise ValueError("API key is not set in environment variables.")
