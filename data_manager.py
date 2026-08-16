@@ -63,14 +63,14 @@ class DataManager:
             raise e
 
 
-    def update_movie(self, movie: Movie, new_title: str) -> Movie | None:
+    def update_movie(self, movie_id: int, new_title: str) -> Movie | None:
         """Update a movie title in the database.
 
-        :param movie: Movie object to update.
+        :param movie_id: Movie ID of the movie to update.
         :param new_title: New title for the movie.
         :return: Updated movie object, or None if not found."""
 
-        updated_movie = db.session.get(Movie, movie.id)
+        updated_movie = db.session.get(Movie, movie_id)
         if updated_movie is None:
             return None
         updated_movie.name = new_title
