@@ -82,8 +82,12 @@ class DataManager:
         return updated_movie
 
 
-    def delete_movie(self, movie_id: int):
-        """Delete a movie from the database."""
+    def delete_movie(self, movie_id: int) -> bool:
+        """Delete a movie from the database.
+
+        :param movie_id: ID of the movie to delete.
+        :return: True if movie was deleted, False otherwise.
+        """
 
         movie = db.session.get(Movie, movie_id)
         if not movie:
