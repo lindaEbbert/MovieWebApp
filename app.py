@@ -9,8 +9,10 @@ from omdb_api import fetch_movie
 app = Flask(__name__)
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/movies.db')}"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    f"sqlite:///{os.path.join(basedir, 'data/movies.db')}"
+)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 
@@ -31,7 +33,7 @@ def create_user():
     redirect to the index.
     """
 
-    user_name = request.form.get("name","").strip()
+    user_name = request.form.get("name", "").strip()
     if not user_name:
         return redirect(url_for("index"))
 
@@ -39,7 +41,7 @@ def create_user():
     return redirect(url_for("index"))
 
 
-@app.route('/users/<int:user_id>/movies', methods=['GET'])
+@app.route("/users/<int:user_id>/movies", methods=["GET"])
 def get_movies(user_id):
     """Get movies for a user."""
 
@@ -76,7 +78,7 @@ def add_movie(user_id):
         name=movie_details["name"],
         year=movie_details["year"],
         poster_url=movie_details["poster_url"],
-        director=movie_details["director"]
+        director=movie_details["director"],
     )
     data_manager.add_movie(movie)
     return redirect(url_for("get_movies", user_id=user_id))
@@ -115,15 +117,15 @@ def delete_movie(user_id, movie_id):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template("404.html"), 404
 
 
 @app.errorhandler(500)
 def page_not_found(e):
-    return render_template('500.html'), 500
+    return render_template("500.html"), 500
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     with app.app_context():
         db.create_all()
     app.run(debug=True)

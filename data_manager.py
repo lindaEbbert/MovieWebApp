@@ -21,7 +21,6 @@ class DataManager:
             raise e
         return user
 
-
     def get_users(self) -> list[User]:
         """Get all users ordered by name.
 
@@ -30,7 +29,6 @@ class DataManager:
 
         statement = db.select(User).order_by(User.name)
         return db.session.execute(statement).scalars().all()
-
 
     def get_movies(self, user_id: int) -> list[Movie]:
         """Get all movies from a user.
@@ -42,12 +40,10 @@ class DataManager:
         statement = db.select(Movie).where(Movie.user_id == user_id)
         return db.session.execute(statement).scalars().all()
 
-
     def get_user(self, user_id: int) -> User:
         """Get a user by ID."""
 
         return db.session.get(User, user_id)
-
 
     def add_movie(self, movie: Movie) -> None:
         """Add a movie to the database.
@@ -61,7 +57,6 @@ class DataManager:
         except SQLAlchemyError as e:
             db.session.rollback()
             raise e
-
 
     def update_movie(self, movie_id: int, new_title: str) -> Movie | None:
         """Update a movie title in the database.
@@ -80,7 +75,6 @@ class DataManager:
             db.session.rollback()
             raise e
         return updated_movie
-
 
     def delete_movie(self, movie_id: int) -> bool:
         """Delete a movie from the database.

@@ -18,10 +18,12 @@ def format_response(data: dict) -> dict:
     name, year, director, and poster_url.
     """
 
-    annotations = {"name": "Title",
-                   "year": "Year",
-                   "director": "Director",
-                   "poster_url": "Poster"}
+    annotations = {
+        "name": "Title",
+        "year": "Year",
+        "director": "Director",
+        "poster_url": "Poster",
+    }
 
     formatted_response = {}
     for key, value in annotations.items():
@@ -54,8 +56,7 @@ def fetch_movie(title: str, year=None) -> dict | None:
 
     if not API_KEY:
         raise ValueError("API key is not set in environment variables.")
-    params = {"apikey": API_KEY,
-                  "t": title}
+    params = {"apikey": API_KEY, "t": title}
     if year:
         params["y"] = year
 
