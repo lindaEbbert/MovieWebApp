@@ -73,7 +73,7 @@ class DataManager:
         updated_movie = db.session.get(Movie, movie.id)
         if updated_movie is None:
             return None
-        updated_movie.title = new_title
+        updated_movie.name = new_title
         try:
             db.session.commit()
         except SQLAlchemyError as e:
