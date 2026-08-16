@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}MovieApp{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('index') }}">← Back to Users</a>
+<h1>Movies for {{ user.name }}</h1>
+<div class="card-grid">
+    {% for movie in movies %}
+    <div class="card">
+        {% if movie.poster_url %}
+        <img alt="Poster: {{ movie.name }}"
+             class="poster"
+             src="{{ movie.poster_url or url_for('static','no_cover.jpg') }}">
+        {% endif %}
+        <form action="{{ url_for('update_movie', user_id=user.id, movie_id=movie.id) }}"
+              method="post">
+            <input name="new_title" required type="text"
+                   value="{{ movie.name }}">
+            <button class="blue-button" type="submit">Update</button>
+        </form>
+        <p><strong>Year:</strong> {{ movie.year or "unknown" }}</p>
+        <p><strong>Director:</strong> {{ movie.director or "unknown" }}</p>
+        <form action="{{ url_for('delete_movie', user_id=user.id, movie_id=movie.id) }}"
+              method="post">
+            <button class="red-button" type="submit">Delete</button>
+        </form>
+    </div>
+    {% else %}
+    <p class="no-users-message">No movies found.</p>
+    {% endfor %}
+</div>
+<div class="card">
+    <h2>Add New Movie</h2>
+    <form action="{{ url_for('add_movie', user_id=user.id) }}" method="post">
+        <input name="name" placeholder="Movie title" required type="text">
+        <input max="2100" min="1888" name="year"
+               placeholder="Year (optional)" type="number">
+        <button class="blue-button" type="submit">Add Movie</button>
+    </form>
+</div>
+{% endblock %}

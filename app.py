@@ -1,9 +1,10 @@
 import os
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import abort, Flask, render_template, request, redirect, url_for
 
 from models import db, User, Movie
 from data_manager import DataManager
+from omdb_api import fetch_movie
 
 app = Flask(__name__)
 
@@ -37,11 +38,71 @@ def create_user():
     return redirect(url_for("index"))
 
 
-@app.route('/users/<int:user_id>/movies')
+@app.route('/users/<int:user_id>/movies', methods=['GET'])
 def get_movies(user_id):
     """Get movies for a user."""
 
-    return f"Movies for user: {user_id}"
+    user = data_manager.get_user(user_id)
+    if not user:
+        abort(404)
+
+    movies = data_manager.get_movies(user_id)
+    return render_template("movies.html", movies=movies, user=user)
+
+
+@app.route("/users/<int:user_id>/movies", methods=["POST"])
+def add_movie(user_id):
+    """Add a movie to a user's list."""
+
+    title = request.form.get("name").strip()
+    year = request.form.get("year")
+    if not year:
+        year = None
+    else:
+        try:
+            year = int(year)
+        except ValueError:
+            year = None
+
+    user = data_manager.get_user(user_id)
+    if not user:
+        abort(404)
+    movie_details = fetch_movie(title, year)
+    if not movie_details:
+        return redirect(url_for("get_movies", user_id=user_id))
+    movie = Movie(
+        user_id=user_id,
+        name=movie_details["name"],
+        year=movie_details["year"],
+        poster_url=movie_details["poster_url"],
+        director=movie_details["director"]
+    )
+    data_manager.add_movie(movie)
+    return redirect(url_for("get_movies", user_id=user_id))
+
+
+@app.route("/users/<int:user_id>/movies/<int:movie_id>/update", methods=["POST"])
+def update_movie(user_id, movie_id):
+    """Update a movie's title."""
+
+    new_title = request.form.get("new_title").strip()
+    if not new_title:
+        return redirect(url_for("get_movies", user_id=user_id))
+
+    updated_movie = data_manager.update_movie(movie_id, new_title)
+    if not updated_movie:
+        abort(404)
+    return redirect(url_for("get_movies", user_id=user_id))
+
+
+@app.route("/users/<int:user_id>/movies/<int:movie_id>/delete", methods=["POST"])
+def delete_movie(user_id, movie_id):
+    """Delete a movie from a user's list."""
+
+    is_deleted = data_manager.delete_movie(movie_id)
+    if not is_deleted:
+        abort(404)
+    return redirect(url_for("get_movies", user_id=user_id))
 
 
 if __name__ == '__main__':
