@@ -1,0 +1,172 @@
+/* --- Colors and base values ----------------------------------------------- */
+
+:root {
+    --blue: #2563eb;        /* header, buttons */
+    --blue-dark: #1e40af;   /* footer */
+    --blue-hover: #1d4ed8;
+    --red: #ef4444;         /* delete button */
+    --red-hover: #dc2626;
+    --page: #f8fafc;        /* page background */
+    --ink: #1e293b;         /* headings and text */
+    --muted: #64748b;       /* hint texts */
+    --line: #e2e8f0;        /* card border */
+    --field: #cbd5e1;       /* input border */
+    --radius: 8px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    background: var(--page);
+    color: var(--ink);
+}
+
+/* --- Layout ---------------------------------------------------------------- */
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+main {
+    padding: 2rem 0;
+}
+
+h1 {
+    font-size: 2rem;
+    margin: 0 0 1.5rem;
+}
+
+h2 {
+    font-size: 1.25rem;
+    margin: 0 0 1rem;
+}
+
+/* --- Header and footer ----------------------------------------------------- */
+
+.site-header {
+    background: var(--blue);
+    color: #fff;
+    padding: 1.5rem 0;
+}
+
+.site-header a {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.site-footer {
+    background: var(--blue-dark);
+    color: #fff;
+    text-align: center;
+    padding: 1.5rem 0;
+}
+
+/* --- Cards and grid -------------------------------------------------------- */
+
+.card-grid {
+    display: grid;
+    /* Fits as many cards per row as possible at a minimum width of 260px. */
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.06);
+}
+
+.no-users-message {
+    color: var(--muted);
+    margin: 0;
+}
+
+/* --- Buttons --------------------------------------------------------------- */
+
+/* Applies to <button> and to <a class="blue-button"> alike. */
+.blue-button,
+.red-button {
+    display: inline-block;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font: inherit;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.blue-button {
+    background: var(--blue);
+}
+
+.blue-button:hover {
+    background: var(--blue-hover);
+}
+
+.red-button {
+    background: var(--red);
+}
+
+.red-button:hover {
+    background: var(--red-hover);
+}
+
+/* --- Forms ----------------------------------------------------------------- */
+
+input {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--field);
+    border-radius: 6px;
+    font: inherit;
+}
+
+/* Input and button side by side. flex-wrap lets the add-movie form with its
+   two fields wrap onto a second line. */
+.card form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.card form input[type="text"] {
+    flex: 1;
+}
+
+/* Visible focus ring for keyboard navigation. */
+:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
+}
+
+/* --- Movie page ------------------------------------------------------------ */
+
+.poster {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+/* Inside movie cards the field sits above the button, not next to it.
+   Movie cards live in .card-grid, the add-item cards do not. */
+.card-grid .card form {
+    flex-direction: column;
+    align-items: stretch;
+}
